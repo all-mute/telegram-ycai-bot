@@ -1,0 +1,8 @@
+version: '3.8'
+
+services:
+  tgbotsup:
+    build: .
+    ports:
+      - "5067:5000"
+    restart: unless-stopped
