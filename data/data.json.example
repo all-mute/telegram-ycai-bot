@@ -1,0 +1,41 @@
+{
+    "tgbot_chats": [],
+    "tgbot_snippets": [
+        {
+            "is_command": true,
+            "name": "start",
+            "snippet_text": "Добро пожаловать в бота!"
+        },
+        {
+            "is_command": true,
+            "name": "add_chat",
+            "snippet_text": "Чат успешно добавлен!"
+        },
+        {
+            "is_command": true,
+            "name": "remove_chat",
+            "snippet_text": "Чат успешно удален!"
+        },
+        {
+            "is_command": true,
+            "name": "all_guides",
+            "snippet_text": "Вот все доступные сниппеты: "
+        },
+        {
+            "is_command": true,
+            "name": "send_news",
+            "snippet_text": "Новости успешно отправлены!"
+        },
+        {
+            "is_command": true,
+            "name": "sync_pb",
+            "snippet_text": "Команды и сниппеты успешно синхронизированы!"
+        },
+        {
+            "is_command": false,
+            "name": "snippet1_name",
+            "snippet_text": "snippet1_text"
+        }
+    ],
+    "tgbot_logs": []
+}
