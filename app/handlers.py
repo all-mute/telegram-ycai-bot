@@ -17,6 +17,7 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     logger.debug(f"Вызвана команда /start от пользователя с ID: {update.effective_user.id}")
     await update.message.reply_text(
         commands.get("start", "default start message"),
+        parse_mode='Markdown'
     )
     
 async def add_chat_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -25,6 +26,7 @@ async def add_chat_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     create_group_chat_id(update.effective_chat.id)
     await update.message.reply_text(
         commands.get("add_chat", "default add chat message"),
+        parse_mode='Markdown'
     )
     
 async def remove_chat_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -33,6 +35,7 @@ async def remove_chat_command(update: Update, context: ContextTypes.DEFAULT_TYPE
     remove_group_chat_id(update.effective_chat.id)
     await update.message.reply_text(
         commands.get("remove_chat", "default remove chat message"),
+        parse_mode='Markdown'
     )
     
 async def snippet_response_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -40,6 +43,7 @@ async def snippet_response_command(update: Update, context: ContextTypes.DEFAULT
     snippet_text = get_snippet_by_name(update.message.text.split()[0][1:])
     await update.message.reply_text(
         snippet_text,
+        parse_mode='Markdown'
     )
 
 async def all_guides_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -48,6 +52,7 @@ async def all_guides_command(update: Update, context: ContextTypes.DEFAULT_TYPE)
     __commands, snippets = init_commands_and_snippets()
     await update.message.reply_text(
         commands.get("all_guides", "default all guides message") + "\n" + "\n".join([f"/{key}" for key, value in snippets.items()]),
+        parse_mode='Markdown'
     )
     
 async def send_news_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -62,7 +67,7 @@ async def send_news_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     for chat_id in chat_ids:
         try:
-            await context.bot.send_message(chat_id=chat_id, text=message)
+            await context.bot.send_message(chat_id=chat_id, text=message, parse_mode='Markdown')
         except BadRequest as e:
             if str(e) == "Chat not found":
                 logger.warning(f"Чат с ID {chat_id} не найден. Удаляем из PocketBase.")
@@ -71,4 +76,5 @@ async def send_news_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     from app.bot import commands
     await update.message.reply_text(
         commands.get("send_news", "default send news message"),
+        parse_mode='Markdown'
     )
