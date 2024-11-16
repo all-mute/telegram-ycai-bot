@@ -2,6 +2,8 @@ from loguru import logger
 import pocketbase
 import dotenv, os
 
+logger.warning("Используется pocketbase!")
+
 dotenv.load_dotenv()
 
 PB_URL = os.getenv("PB_URL")

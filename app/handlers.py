@@ -6,11 +6,16 @@ from telegram.error import BadRequest
 
 dotenv.load_dotenv()
 
-DB_CHOICE = os.getenv("DB_CHOICE") == "pocketbase"
-if DB_CHOICE:
-    from app.pb import init_commands_and_snippets, get_all_chats, create_group_chat_id, remove_group_chat_id, get_snippet_by_name
+DB_CHOICE = os.getenv("DB_CHOICE")
+if DB_CHOICE == "pocketbase":
+    from app.pb import init_commands_and_snippets, get_all_chats, create_group_chat_id, remove_group_chat_id, create_log
+elif DB_CHOICE == "sqlite":
+    from app.sqlitedb import init_commands_and_snippets, get_all_chats, create_group_chat_id, remove_group_chat_id, create_log
+elif DB_CHOICE == "jsondb":
+    from app.jsondb import init_commands_and_snippets, get_all_chats, create_group_chat_id, remove_group_chat_id, create_log
 else:
-    from app.fakepb import init_commands_and_snippets, get_all_chats, create_group_chat_id, remove_group_chat_id, get_snippet_by_name
+    logger.error(f"Неизвестный тип базы данных: {DB_CHOICE}")
+    raise ValueError(f"Неизвестный тип базы данных: {DB_CHOICE}")
 
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     from app.bot import commands

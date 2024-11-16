@@ -8,11 +8,16 @@ from telegram.constants import BotCommandScopeType
 
 dotenv.load_dotenv()
 
-DB_CHOICE = os.getenv("DB_CHOICE") == "pocketbase"
-if DB_CHOICE:
+DB_CHOICE = os.getenv("DB_CHOICE")
+if DB_CHOICE == "pocketbase":
     from app.pb import init_commands_and_snippets, get_all_chats, create_group_chat_id, remove_group_chat_id, create_log
+elif DB_CHOICE == "sqlite":
+    from app.sqlitedb import init_commands_and_snippets, get_all_chats, create_group_chat_id, remove_group_chat_id, create_log
+elif DB_CHOICE == "jsondb":
+    from app.jsondb import init_commands_and_snippets, get_all_chats, create_group_chat_id, remove_group_chat_id, create_log
 else:
-    from app.fakepb import init_commands_and_snippets, get_all_chats, create_group_chat_id, remove_group_chat_id, create_log
+    logger.error(f"Неизвестный тип базы данных: {DB_CHOICE}")
+    raise ValueError(f"Неизвестный тип базы данных: {DB_CHOICE}")
 
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 TELEGRAM_ADMIN_IDS = [int(item) for item in os.getenv("TELEGRAM_ADMIN_IDS").split(',')]
