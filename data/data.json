@@ -4,7 +4,7 @@
         {
             "is_command": true,
             "name": "start",
-            "snippet_text": "Добро пожаловать в бота"
+            "snippet_text": "Добро пожаловать в бота\\!"
         },
         {
             "is_command": true,
@@ -34,7 +34,7 @@
         {
             "is_command": false,
             "name": "snippet1_name",
-            "snippet_text": "snippet1_text"
+            "snippet_text": "snippet1\\_text"
         }
     ],
     "tgbot_logs": []

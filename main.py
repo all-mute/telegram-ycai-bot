@@ -4,7 +4,7 @@ from telegram import Update
 from telegram.ext import Application
 from loguru import logger
 from app.bot import bot_init
-from app.init_sqlite_db import init_sqlite_db
+from app.db_wrappers.init_sqlite_db import init_sqlite_db
 
 # Configure logging
 logger.add("logs/app.log", rotation="5 MB", retention="100 days", level="DEBUG")

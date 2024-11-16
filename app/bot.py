@@ -2,7 +2,7 @@ from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters
 from loguru import logger
 import dotenv, os
-from app.handlers import snippet_response_command, send_news_command, start_command, add_chat_command, remove_chat_command, all_guides_command, presend_news_command
+from app.handlers import snippet_response_command, send_news_command, start_command, add_chat_command, remove_chat_command, all_guides_command, presend_news_command, searchapi_command
 from telegram import BotCommand, BotCommandScope
 from telegram.constants import BotCommandScopeType
 
@@ -10,11 +10,11 @@ dotenv.load_dotenv()
 
 DB_CHOICE = os.getenv("DB_CHOICE")
 if DB_CHOICE == "pocketbase":
-    from app.pb import init_commands_and_snippets, get_all_chats, create_group_chat_id, remove_group_chat_id, create_log
+    from app.db_wrappers.pb import init_commands_and_snippets, get_all_chats, create_group_chat_id, remove_group_chat_id, create_log
 elif DB_CHOICE == "sqlite":
-    from app.sqlitedb import init_commands_and_snippets, get_all_chats, create_group_chat_id, remove_group_chat_id, create_log
+    from app.db_wrappers.sqlitedb import init_commands_and_snippets, get_all_chats, create_group_chat_id, remove_group_chat_id, create_log
 elif DB_CHOICE == "jsondb":
-    from app.jsondb import init_commands_and_snippets, get_all_chats, create_group_chat_id, remove_group_chat_id, create_log
+    from app.db_wrappers.jsondb import init_commands_and_snippets, get_all_chats, create_group_chat_id, remove_group_chat_id, create_log
 else:
     logger.error(f"Неизвестный тип базы данных: {DB_CHOICE}")
     raise ValueError(f"Неизвестный тип базы данных: {DB_CHOICE}")
@@ -44,6 +44,9 @@ async def register_handlers(application: Application) -> None:
     
     application.add_handler(CommandHandler("all_guides", all_guides_command))
     logger.debug("Обработчик команды /all_guides зарегистрирован.")
+    
+    application.add_handler(CommandHandler("searchapi", searchapi_command))
+    logger.debug("Обработчик команды /searchapi зарегистрирован.")
     
     application.add_handler(CommandHandler("send_news",
                                            send_news_command,

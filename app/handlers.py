@@ -3,19 +3,23 @@ from telegram.ext import ContextTypes
 from loguru import logger
 import dotenv, os
 from telegram.error import BadRequest
+import requests
+from app.ai import search_api_generative
 
 dotenv.load_dotenv()
 
 DB_CHOICE = os.getenv("DB_CHOICE")
 if DB_CHOICE == "pocketbase":
-    from app.pb import init_commands_and_snippets, get_all_chats, create_group_chat_id, remove_group_chat_id, create_log, get_snippet_by_name
+    from app.db_wrappers.pb import init_commands_and_snippets, get_all_chats, create_group_chat_id, remove_group_chat_id, create_log, get_snippet_by_name
 elif DB_CHOICE == "sqlite":
-    from app.sqlitedb import init_commands_and_snippets, get_all_chats, create_group_chat_id, remove_group_chat_id, create_log, get_snippet_by_name
+    from app.db_wrappers.sqlitedb import init_commands_and_snippets, get_all_chats, create_group_chat_id, remove_group_chat_id, create_log, get_snippet_by_name
 elif DB_CHOICE == "jsondb":
-    from app.jsondb import init_commands_and_snippets, get_all_chats, create_group_chat_id, remove_group_chat_id, create_log, get_snippet_by_name
+    from app.db_wrappers.jsondb import init_commands_and_snippets, get_all_chats, create_group_chat_id, remove_group_chat_id, create_log, get_snippet_by_name
 else:
     logger.error(f"Неизвестный тип базы данных: {DB_CHOICE}")
     raise ValueError(f"Неизвестный тип базы данных: {DB_CHOICE}")
+
+SEARCH_API_GENERATIVE = f"https://ya.ru/search/xml/generative?folderid={os.getenv('FOLDER_ID')}"
 
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     from app.bot import commands
@@ -102,3 +106,10 @@ async def do_news_to_one_or_many(chat_ids: list, update: Update, context: Contex
         commands.get("send_news", "default send news message"),
         parse_mode='MarkdownV2'
     )
+    
+async def searchapi_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    logger.debug("Запрос API поиска")
+    generated_content = await search_api_generative(update.message.text.split(" ", 1)[1])
+    await update.message.reply_text(generated_content)#, parse_mode='MarkdownV2')
+    
+    
