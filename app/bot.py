@@ -2,7 +2,7 @@ from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters
 from loguru import logger
 import dotenv, os
-from app.handlers import snippet_response_command, send_news_command, start_command, add_chat_command, remove_chat_command, all_guides_command
+from app.handlers import snippet_response_command, send_news_command, start_command, add_chat_command, remove_chat_command, all_guides_command, presend_news_command
 from telegram import BotCommand, BotCommandScope
 from telegram.constants import BotCommandScopeType
 
@@ -50,6 +50,12 @@ async def register_handlers(application: Application) -> None:
                                            filters=filters.User(user_id=TELEGRAM_ADMIN_IDS)
                                            ))
     logger.debug("Обработчик команды /send_news зарегистрирован.")
+    
+    application.add_handler(CommandHandler("presend_news",
+                                           presend_news_command,
+                                           filters=filters.User(user_id=TELEGRAM_ADMIN_IDS)
+                                           ))
+    logger.debug("Обработчик команды /presend_news зарегистрирован.")
     
     for snippet, value in snippets.items():
         application.add_handler(CommandHandler(snippet, snippet_response_command))

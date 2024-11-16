@@ -42,13 +42,13 @@ def init_sqlite_db():
     # Добавляем начальные данные только если база данных новая
     if not db_exists:
         default_snippets = [
-            (True, "start", "Добро пожаловать в бота!"),
-            (True, "add_chat", "Чат успешно добавлен!"),
-            (True, "remove_chat", "Чат успешно удален!"),
-            (True, "all_guides", "Вот все доступные сниппеты: "),
-            (True, "send_news", "Новости успешно отправлены!"),
-            (True, "sync_pb", "Команды и сниппеты успешно синхронизированы!"),
-            (False, "snippet1_name", "snippet1_text")
+            (True, "start", "Добро пожаловать в бота\!\n\n**Доступные команды**:\n• /add\_chat\n• /remove\_chat\n• /all\_guides\n• /send\_news\n• /sync\_pb"),
+            (True, "add_chat", "Чат успешно добавлен"),
+            (True, "remove_chat", "Чат успешно удален\!"),
+            (True, "all_guides", "Вот все **доступные сниппеты**"),
+            (True, "send_news", "Новости успешно отправлены"),
+            (True, "sync_pb", "Команды и сниппеты успешно синхронизированы"),
+            (False, "snippet1_name", "snippet1\_text")
         ]
         
         cursor.executemany(

@@ -4,32 +4,32 @@
         {
             "is_command": true,
             "name": "start",
-            "snippet_text": "Добро пожаловать в бота!"
+            "snippet_text": "Добро пожаловать в бота"
         },
         {
             "is_command": true,
             "name": "add_chat",
-            "snippet_text": "Чат успешно добавлен!"
+            "snippet_text": "Чат успешно добавлен"
         },
         {
             "is_command": true,
             "name": "remove_chat",
-            "snippet_text": "Чат успешно удален!"
+            "snippet_text": "Чат успешно удален"
         },
         {
             "is_command": true,
             "name": "all_guides",
-            "snippet_text": "Вот все доступные сниппеты: "
+            "snippet_text": "Вот все доступные сниппеты"
         },
         {
             "is_command": true,
             "name": "send_news",
-            "snippet_text": "Новости успешно отправлены!"
+            "snippet_text": "Новости успешно отправлены"
         },
         {
             "is_command": true,
             "name": "sync_pb",
-            "snippet_text": "Команды и сниппеты успешно синхронизированы!"
+            "snippet_text": "Команды и сниппеты успешно синхронизированы"
         },
         {
             "is_command": false,

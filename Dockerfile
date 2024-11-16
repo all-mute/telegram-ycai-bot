@@ -10,7 +10,5 @@ COPY . /app
 # Устанавливаем зависимости
 RUN pip install --no-cache-dir -r requirements.txt
 
-RUN python app/init_sqlite_db.py
-
 # Указываем команду для запуска приложения
 CMD ["python", "main.py"]

@@ -4,6 +4,7 @@ from telegram import Update
 from telegram.ext import Application
 from loguru import logger
 from app.bot import bot_init
+from app.init_sqlite_db import init_sqlite_db
 
 # Configure logging
 logger.add("logs/app.log", rotation="5 MB", retention="100 days", level="DEBUG")
@@ -13,6 +14,10 @@ stop_event = asyncio.Event()
 
 async def bot_runner():
     try:
+        # Initialize database before starting the bot
+        logger.info("Initializing database...")
+        init_sqlite_db()
+        
         # Initialize bot and application
         application: Application = await bot_init()
 
