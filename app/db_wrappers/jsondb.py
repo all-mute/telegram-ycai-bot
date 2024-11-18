@@ -82,3 +82,29 @@ def save_data(filename: str, data):
     except IOError:
         logger.error(f"Ошибка при сохранении данных в файл {filename}")
         raise
+
+def create_sniffer_log(
+    chat_id: str,
+    chat_title: str,
+    chat_username: str,
+    user_id: str,
+    user_nickname: str,
+    message_id: str,
+    date: str,
+    chat_type: str,
+    message_text: str
+):
+    logger.debug(f"Создание снифер-лога для чата с ID: {chat_id}")
+    data = load_data(DATA_FILE)
+    data['tgbot_sniffer_logs'].append({
+        "chat_id": chat_id,
+        "chat_title": chat_title,
+        "chat_username": chat_username,
+        "user_id": user_id,
+        "user_nickname": user_nickname,
+        "message_id": message_id,
+        "date": date,
+        "chat_type": chat_type,
+        "message_text": message_text
+    })
+    save_data(DATA_FILE, data)

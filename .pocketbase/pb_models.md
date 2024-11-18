@@ -30,3 +30,21 @@
       "group_id": "test",
       "logs": "JSON"
     },
+
+# tgbot_sniffer_logs
+{
+      "id": "RECORD_ID",
+      "collectionId": "1i9lfwgdt3p2x39",
+      "collectionName": "tgbot_sniffer_logs",
+      "created": "2022-01-01 01:00:00.123Z",
+      "updated": "2022-01-01 23:59:59.456Z",
+      "chat_id": "test",
+      "chat_title": "test",
+      "chat_username": "test",
+      "user_id": "test",
+      "user_nickname": "test",
+      "message_id": "test",
+      "date": "test",
+      "chat_type": "test",
+      "message_text": "test"
+    }

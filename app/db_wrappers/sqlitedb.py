@@ -102,4 +102,27 @@ def get_snippet_by_name(name: str) -> str:
     result = cursor.fetchone()
     
     conn.close()
-    return result['snippet_text'] if result else "Сниппет не найден" 
+    return result['snippet_text'] if result else "Сниппет не найден"
+
+def create_sniffer_log(
+    chat_id: str,
+    chat_title: str,
+    chat_username: str,
+    user_id: str,
+    user_nickname: str,
+    message_id: str,
+    date: str,
+    chat_type: str,
+    message_text: str
+):
+    logger.debug(f"Создание снифер-лога для чата с ID: {chat_id}")
+    conn = get_connection()
+    cursor = conn.cursor()
+    
+    cursor.execute(
+        'INSERT INTO tgbot_sniffer_logs (chat_id, chat_title, chat_username, user_id, user_nickname, message_id, date, chat_type, message_text) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        (chat_id, chat_title, chat_username, user_id, user_nickname, message_id, date, chat_type, message_text)
+    )
+    
+    conn.commit()
+    conn.close()

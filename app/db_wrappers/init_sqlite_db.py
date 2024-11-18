@@ -39,6 +39,22 @@ def init_sqlite_db():
     )
     ''')
     
+    # Добавляем таблицу для снифер-логов
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS tgbot_sniffer_logs (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        chat_id TEXT,
+        chat_title TEXT,
+        chat_username TEXT,
+        user_id TEXT,
+        user_nickname TEXT,
+        message_id TEXT,
+        date TEXT,
+        chat_type TEXT,
+        message_text TEXT
+    )
+    ''')
+    
     # Добавляем начальные данные только если база данных новая
     if not db_exists:
         default_snippets = [

@@ -37,5 +37,6 @@
             "snippet_text": "snippet1\\_text"
         }
     ],
-    "tgbot_logs": []
+    "tgbot_logs": [],
+    "tgbot_sniffer_logs": []
 }

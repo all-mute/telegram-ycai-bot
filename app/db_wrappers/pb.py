@@ -15,6 +15,8 @@ PB_LOGS_TABLENAME = os.getenv("PB_LOGS_TABLENAME")
 PB_LOGS_TABLEID = os.getenv("PB_LOGS_TABLEID")
 PB_SNIPPETS_TABLENAME = os.getenv("PB_SNIPPETS_TABLENAME")
 PB_SNIPPETS_TABLEID = os.getenv("PB_SNIPPETS_TABLEID")
+PB_SNIFFER_LOGS_TABLENAME = os.getenv("PB_SNIFFER_LOGS_TABLENAME")
+PB_SNIFFER_LOGS_TABLEID = os.getenv("PB_SNIFFER_LOGS_TABLEID")
 
 logger.debug(f"Инициализация PocketBase с URL: {PB_URL}")
 pb = pocketbase.PocketBase(PB_URL)
@@ -51,9 +53,37 @@ def remove_group_chat_id(chat_id: str):
 
 def create_log(chat_id: str, logs: dict):
     logger.debug(f"Создание лога для чата с ID: {chat_id}")
-    pb.collection(PB_LOGS_TABLENAME).create({"group_id": chat_id, "logs": logs})
+    res = pb.collection(PB_LOGS_TABLENAME).create({"group_id": chat_id, "logs": logs})
+    logger.debug(f"Лог создан: {res.__dict__}")
 
 def get_snippet_by_name(name: str) -> str:
     logger.debug(f"Получение сниппета с названием: {name}")
     table_res = pb.collection(PB_SNIPPETS_TABLENAME).get_first_list_item(filter = f"name = '{name}'")
     return table_res.snippet_text if table_res else "Сниппет не найден"
+
+def create_sniffer_log(
+        chat_id,
+        chat_title,
+        chat_username,
+        user_id,
+        user_nickname,
+        message_id,
+        date,
+        chat_type,
+        message_text
+    ):
+    logger.debug(f"Создание лога для чата с ID: {chat_id}")
+    res = pb.collection(PB_SNIFFER_LOGS_TABLENAME).create(
+        {
+            "chat_id": chat_id,
+            "chat_title": chat_title,
+            "chat_username": chat_username,
+            "user_id": user_id,
+            "user_nickname": user_nickname,
+            "message_id": message_id,
+            "date": date,
+            "chat_type": chat_type,
+            "message_text": message_text
+        }
+    )
+    logger.debug(f"Лог создан: {res.__dict__}")

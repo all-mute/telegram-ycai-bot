@@ -10,11 +10,11 @@ dotenv.load_dotenv()
 
 DB_CHOICE = os.getenv("DB_CHOICE")
 if DB_CHOICE == "pocketbase":
-    from app.db_wrappers.pb import init_commands_and_snippets, get_all_chats, create_group_chat_id, remove_group_chat_id, create_log, get_snippet_by_name
+    from app.db_wrappers.pb import init_commands_and_snippets, get_all_chats, create_group_chat_id, remove_group_chat_id, create_log, get_snippet_by_name, create_sniffer_log
 elif DB_CHOICE == "sqlite":
-    from app.db_wrappers.sqlitedb import init_commands_and_snippets, get_all_chats, create_group_chat_id, remove_group_chat_id, create_log, get_snippet_by_name
+    from app.db_wrappers.sqlitedb import init_commands_and_snippets, get_all_chats, create_group_chat_id, remove_group_chat_id, create_log, get_snippet_by_name, create_sniffer_log
 elif DB_CHOICE == "jsondb":
-    from app.db_wrappers.jsondb import init_commands_and_snippets, get_all_chats, create_group_chat_id, remove_group_chat_id, create_log, get_snippet_by_name
+    from app.db_wrappers.jsondb import init_commands_and_snippets, get_all_chats, create_group_chat_id, remove_group_chat_id, create_log, get_snippet_by_name, create_sniffer_log
 else:
     logger.error(f"Неизвестный тип базы данных: {DB_CHOICE}")
     raise ValueError(f"Неизвестный тип базы данных: {DB_CHOICE}")
@@ -109,7 +109,79 @@ async def do_news_to_one_or_many(chat_ids: list, update: Update, context: Contex
     
 async def searchapi_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     logger.debug("Запрос API поиска")
-    generated_content = await search_api_generative(update.message.text.split(" ", 1)[1])
-    await update.message.reply_text(generated_content)#, parse_mode='MarkdownV2')
     
+    chat_id = update.effective_chat.id
+    chat_title = update.effective_chat.title if update.effective_chat.title else "Неизвестный чат"
+    chat_username = update.effective_chat.username if update.effective_chat.username else "Неизвестный никнейм"
+    user_id = update.effective_user.id
+    user_nickname = update.effective_user.username if update.effective_user.username else "Неизвестный пользователь"
     
+    # Извлекаем дополнительные данные из сообщения
+    message_id = update.message.message_id
+    date = update.message.date
+    chat_type = update.effective_chat.type
+    
+    await context.bot.send_chat_action(chat_id=update.effective_chat.id, action='typing')
+    
+    query = update.message.text.split(" ", 1)[1]
+    try:
+        generated_content = await search_api_generative(query)
+        await update.message.reply_text(generated_content)
+        
+        # Логируем информацию без дополнительного кодирования
+        create_log(chat_id, {
+            "chat_title": chat_title,
+            "chat_username": chat_username,
+            "user_id": user_id,
+            "user_nickname": user_nickname,
+            "query": query,
+            "response": generated_content,
+            "message_id": message_id,
+            "date": date.isoformat(),
+            "chat_type": chat_type
+        })
+    except Exception as e:
+        await update.message.reply_text("Произошла ошибка при обработке запроса.")
+        
+        # Логируем ошибку без дополнительного кодирования
+        create_log(chat_id, {
+            "chat_title": chat_title,
+            "chat_username": chat_username,
+            "user_id": user_id,
+            "user_nickname": user_nickname,
+            "query": query,
+            "error": str(e),
+            "message_id": message_id,
+            "date": date.isoformat(),
+            "chat_type": chat_type
+        })
+    
+
+async def sniffer(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    logger.debug("Запрос API поиска")
+    
+    chat_id = update.effective_chat.id
+    chat_title = update.effective_chat.title if update.effective_chat.title else "Неизвестный чат"
+    chat_username = update.effective_chat.username if update.effective_chat.username else "Неизвестный никнейм"
+    user_id = update.effective_user.id
+    user_nickname = update.effective_user.username if update.effective_user.username else "Неизвестный пользователь"
+    
+    message_text = update.message.text
+    
+    # Извлекаем дополнительные данные из сообщения
+    message_id = update.message.message_id
+    date = update.message.date
+    chat_type = update.effective_chat.type
+    
+    # Логируем информацию без дополнительного кодирования
+    create_sniffer_log(
+        chat_id,
+        chat_title,
+        chat_username,
+        user_id,
+        user_nickname,
+        message_id,
+        date.isoformat(),
+        chat_type,
+        message_text
+    )
